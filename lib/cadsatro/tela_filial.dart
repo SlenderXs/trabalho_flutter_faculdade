@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'UploadImagem.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:camera_camera/camera_camera.dart';
 
 void main() => runApp(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: TelaSinistro(),
+        home: TelaFiliais(),
       ),
     );
 
-class TelaSinistro extends StatefulWidget {
-  const TelaSinistro({Key? key}) : super(key: key);
+class TelaFiliais extends StatefulWidget {
+  const TelaFiliais({Key? key}) : super(key: key);
 
   @override
-  _TelaSinistroState createState() => _TelaSinistroState();
+  _TelaFiliaisState createState() => _TelaFiliaisState();
 }
 
-final TextEditingController _controllerCPFdoProprietario =
-    TextEditingController();
-final TextEditingController _controllerDocumentodoCarro =
-    TextEditingController();
-final TextEditingController _controllerBoletimdeOcorrencia =
-    TextEditingController();
-
-class _TelaSinistroState extends State<TelaSinistro> {
+class _TelaFiliaisState extends State<TelaFiliais> {
   ImagePicker imagePicker = ImagePicker();
   File? imagemSelecionada;
+
+  final TextEditingController _controllerNome = TextEditingController();
+  final TextEditingController _controllerCNPJ = TextEditingController();
+  final TextEditingController _controllerNomeDaRua = TextEditingController();
+  final TextEditingController _controllerBairro = TextEditingController();
+  final TextEditingController _controllerCidade = TextEditingController();
+  final TextEditingController _controllerEstado = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +36,9 @@ class _TelaSinistroState extends State<TelaSinistro> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 220, 115, 50),
         actions: <Widget>[
-          // ignore: deprecated_member_use
           FlatButton(
             child: Text(
-              "Cadastro de Sinistro",
+              "CADASTRO DE FILIAIS E SEGURADORAS",
               style: const TextStyle(fontSize: 10.0),
             ),
             textColor: Colors.white,
@@ -57,45 +55,73 @@ class _TelaSinistroState extends State<TelaSinistro> {
                 gradient: LinearGradient(
                   colors: [
                     Color.fromARGB(255, 220, 115, 50),
-                    Color.fromARGB(255, 60, 50, 180),
+                    Color.fromARGB(255, 60, 55, 180),
                   ],
                 ),
               ),
             ),
             Column(
               children: <Widget>[
+                TextField(
+                  controller: _controllerNome,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Nome',
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: TextField(
-                    controller: _controllerCPFdoProprietario,
+                    controller: _controllerCNPJ,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'CPF do Proprietário',
+                      labelText: 'CNPJ',
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: TextField(
-                    controller: _controllerDocumentodoCarro,
+                    controller: _controllerNomeDaRua,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'N° do Documento do Carro',
+                      labelText: 'Nome da Rua',
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: TextField(
-                    controller: _controllerBoletimdeOcorrencia,
+                    controller: _controllerBairro,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'N° do Boletim de Ocorrencia'),
+                      border: OutlineInputBorder(),
+                      labelText: 'Bairro',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: TextField(
+                    controller: _controllerCidade,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Cidade',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: TextField(
+                    controller: _controllerEstado,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Estado',
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text("Envie uma foto do Sinistro"),
+                  child: Text("Envie uma da Filial"),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -145,20 +171,16 @@ class _TelaSinistroState extends State<TelaSinistro> {
                   child: RaisedButton(
                     child: Text('Cadastrar'),
                     onPressed: () {
-                      final int? CPFdoProprietario =
-                          int.tryParse(_controllerCPFdoProprietario.text);
-                      final int? DocumentoDoCarro =
-                          int.tryParse(_controllerDocumentodoCarro.text);
-                      final int? BoletimDeOcorrencia =
-                          int.tryParse(_controllerBoletimdeOcorrencia.text);
+                      final String Nome = _controllerNome.text;
+                      final int? CNPJ = int.tryParse(_controllerCNPJ.text);
+                      final String NomeDaRua = _controllerNomeDaRua.text;
+                      final String Bairro = _controllerBairro.text;
+                      final String Cidade = _controllerCidade.text;
+                      final String Estado = _controllerEstado.text;
 
-                      final CadastroSinistro cadastroSinistroNovo =
-                          CadastroSinistro(
-                        CPFdoProprietario!,
-                        DocumentoDoCarro!,
-                        BoletimDeOcorrencia!,
-                      );
-                      print(cadastroSinistroNovo);
+                      final Filiais filiaisNovo = Filiais(
+                          Nome, CNPJ!, NomeDaRua, Bairro, Cidade, Estado);
+                      print(filiaisNovo);
                     },
                   ),
                 ),
@@ -170,47 +192,40 @@ class _TelaSinistroState extends State<TelaSinistro> {
     );
   }
 
-  Future pegarImagemGaleria() async {
-    final PickedFile? imagemTemporaria = await imagePicker.getImage(
-      source: ImageSource.gallery,
-      maxWidth: 240,
-      maxHeight: 240,
-    );
+  pegarImagemGaleria() async {
+    final PickedFile? imagemTemporaria =
+        await imagePicker.getImage(source: ImageSource.gallery);
     if (imagemTemporaria != null) {
-      setState(
-        () {
-          imagemSelecionada = File(imagemTemporaria.path);
-        },
-      );
+      setState(() {
+        imagemSelecionada = File(imagemTemporaria.path);
+      });
     }
   }
 
   pegarImagemCamera() async {
-    final PickedFile? imagemTemperaria = await imagePicker.getImage(
-      source: ImageSource.camera,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (imagemTemperaria != null) {
-      setState(
-        () {
-          imagemSelecionada = File(imagemTemperaria.path);
-        },
-      );
+    final PickedFile? imagemTemporaria =
+        await imagePicker.getImage(source: ImageSource.camera);
+    if (imagemTemporaria != null) {
+      setState(() {
+        imagemSelecionada = File(imagemTemporaria.path);
+      });
     }
   }
 }
 
-class CadastroSinistro {
-  late final int CPFdoProprietario;
-  late final int DocumentoDoCarro;
-  late final int BoletimDeOcorrencia;
+class Filiais {
+  late final String Nome;
+  late final int CNPJ;
+  late final String NomeDaRua;
+  late final String Bairro;
+  late final String Cidade;
+  late final String Estado;
 
-  CadastroSinistro(
-      this.CPFdoProprietario, this.DocumentoDoCarro, this.BoletimDeOcorrencia);
+  Filiais(this.Nome, this.CNPJ, this.NomeDaRua, this.Bairro, this.Cidade,
+      this.Estado);
 
   @override
   String toString() {
-    return 'Cadastro de Sinistro { CPF do Proprietario: $CPFdoProprietario, documento do carro: $DocumentoDoCarro, boletim de ocorrencia: $BoletimDeOcorrencia}';
+    return 'Cadastro de Filiais{Nome: $Nome, cnpj: $CNPJ, Nome da rua: $NomeDaRua, Bairro: $Bairro, Cidade: $Cidade, Estado: $Estado}';
   }
 }

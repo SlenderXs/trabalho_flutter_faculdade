@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_seguradora/cadsatro/cadastro.dart';
+import 'package:trabalho_seguradora/cadsatro/se_cadastrar.dart';
 import 'package:trabalho_seguradora/info/informações.dart';
 
 class TelaLogin extends StatelessWidget {
@@ -27,7 +28,7 @@ class TelaLogin extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TelaCadastro()),
+                  MaterialPageRoute(builder: (context) => TelaDeEscolha()),
                 );
               },
             ),

@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho_seguradora/cadsatro/tela_filial.dart';
 import 'TelaSinistro.dart';
+import 'UploadImagem.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-class TelaCadastro extends StatelessWidget {
+void main() => runApp(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: TelaFiliais(),
+      ),
+    );
+
+class TelaCadastro extends StatefulWidget {
+  const TelaCadastro({Key? key}) : super(key: key);
+
+  @override
+  _TelaCadastroState createState() => _TelaCadastroState();
+}
+
+class _TelaCadastroState extends State<TelaCadastro> {
+  ImagePicker imagePicker = ImagePicker();
+  File? imagemSelecionada;
+
   final TextEditingController _controllerNome = TextEditingController();
   final TextEditingController _controllerDataDeNascimento =
       TextEditingController();
@@ -26,12 +47,7 @@ class TelaCadastro extends StatelessWidget {
               style: const TextStyle(fontSize: 10.0),
             ),
             textColor: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TelaSinistro()),
-              );
-            },
+            onPressed: () {},
           )
         ],
       ),
@@ -109,6 +125,53 @@ class TelaCadastro extends StatelessWidget {
                   ),
                 ),
                 Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text("Envie uma Foto do cliente ou Segurado"),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    imagemSelecionada == null
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Image.file(imagemSelecionada!),
+                          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MaterialButton(
+                          onPressed: () {
+                            pegarImagemGaleria();
+                          },
+                          color: Colors.white,
+                          textColor: Colors.black,
+                          child: Icon(
+                            Icons.add_photo_alternate_outlined,
+                            size: 35.0,
+                          ),
+                          padding: EdgeInsets.all(16.0),
+                          shape: CircleBorder(),
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            pegarImagemCamera();
+                          },
+                          color: Colors.white,
+                          textColor: Colors.black,
+                          child: Icon(
+                            Icons.photo_camera_outlined,
+                            size: 35.0,
+                          ),
+                          padding: EdgeInsets.all(16.0),
+                          shape: CircleBorder(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: RaisedButton(
                     child: Text('Cadastrar'),
@@ -139,6 +202,28 @@ class TelaCadastro extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  pegarImagemGaleria() async {
+    final PickedFile? imagemTemporaria =
+        await imagePicker.getImage(source: ImageSource.gallery);
+    if (imagemTemporaria != null) {
+      setState(
+        () {
+          imagemSelecionada = File(imagemTemporaria.path);
+        },
+      );
+    }
+  }
+
+  pegarImagemCamera() async {
+    final PickedFile? imagemTemporaria =
+        await imagePicker.getImage(source: ImageSource.camera);
+    if (imagemTemporaria != null) {
+      setState(() {
+        imagemSelecionada = File(imagemTemporaria.path);
+      });
+    }
   }
 }
 
